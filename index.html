@@ -1182,18 +1182,22 @@ function getArchive(){
 }
 
 function archSave(){
-  const name=$('arch_name')?.value?.trim();
-  if(!name){alert('Введите название версии');return}
-  const data={};ARCH_INPUTS.forEach(id=>{const el=$(id);if(el)data[id]=el.value});
-  fbArchive[name]={data,date:new Date().toISOString().slice(0,16)};
-  // Limit to MAX_VERSIONS
-  const keys=Object.keys(fbArchive);
-  if(keys.length>MAX_VERSIONS){
-    const sorted=keys.sort((a,b)=>(fbArchive[a].date||'')>(fbArchive[b].date||'')?1:-1);
-    while(Object.keys(fbArchive).length>MAX_VERSIONS){delete fbArchive[sorted.shift()]}
-  }
-  archRef.set(fbArchive);
-  $('arch_name').value='';
+  try{
+    const name=$('arch_name')?.value?.trim();
+    if(!name){alert('Введите название версии');return}
+    const data={};ARCH_INPUTS.forEach(id=>{const el=$(id);if(el)data[id]=el.value});
+    fbArchive[name]={data,date:new Date().toISOString().slice(0,16)};
+    // Limit to MAX_VERSIONS
+    const keys=Object.keys(fbArchive);
+    if(keys.length>MAX_VERSIONS){
+      const sorted=keys.sort((a,b)=>(fbArchive[a].date||'')>(fbArchive[b].date||'')?1:-1);
+      while(Object.keys(fbArchive).length>MAX_VERSIONS){delete fbArchive[sorted.shift()]}
+    }
+    archRef.set(fbArchive).then(()=>{
+      $('arch_name').value='';
+      alert('Версия "'+name+'" сохранена!');
+    }).catch(e=>alert('Ошибка сохранения: '+e.message));
+  }catch(e){alert('Ошибка: '+e.message)}
 }
 
 function archLoad(name){
