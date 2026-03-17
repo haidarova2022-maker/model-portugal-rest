@@ -1183,8 +1183,9 @@ function getArchive(){
 
 function archSave(){
   try{
-    const name=$('arch_name')?.value?.trim();
+    let name=$('arch_name')?.value?.trim();
     if(!name){alert('Введите название версии');return}
+    name=name.replace(/[.#$/\[\]]/g,'-');
     const data={};ARCH_INPUTS.forEach(id=>{const el=$(id);if(el)data[id]=el.value});
     fbArchive[name]={data,date:new Date().toISOString().slice(0,16)};
     // Limit to MAX_VERSIONS
