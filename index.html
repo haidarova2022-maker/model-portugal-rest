@@ -6,6 +6,8 @@
 <title>Model — Финансовая модель</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0f1923;--card:#1a2733;--border:#2a3a4a;--text:#dce4ec;--muted:#94a8b8;
@@ -1150,43 +1152,63 @@ const ARCH_INPUTS=['inv_buyout','inv_legal','inv_renov','inv_design','inv_mkt','
   'bs1_sal','bs1_cnt','bs2_sal','bs2_cnt',
   'p1i','p2i','p1b','p2b','p1a','p2a','reinvest_before','reinvest_after','horizon'];
 
-const PRESET_VERSIONS={
-  "Торе Мар 3.0":{date:"2026-03-15",data:{"inv_buyout":"1600000","inv_legal":"30000","inv_renov":"100000","inv_design":"35000","inv_mkt":"20000","inv_furn":"200000","inv_bp":"35000","inv_bb":"600000","r_seats":"140","r_check_wd":"35","r_check_we":"50","r_wd":"22","r_we":"8","rs1":"0.60","rs2":"0.60","rs3":"0.85","rs4":"0.95","rs5":"1.00","rs6":"1.50","rs7":"1.50","rs8":"1.20","rs9":"1.10","rs10":"1.05","rs11":"0.75","rs12":"0.70","bs1":"1.20","bs2":"1.30","bs3":"1.00","bs4":"0.90","bs5":"0.80","bs6":"0.70","bs7":"0.65","bs8":"0.70","bs9":"0.90","bs10":"0.95","bs11":"1.20","bs12":"1.45","s1":"1200","n1":"4","s2":"1600","n2":"16","s3":"2800","n3":"3","s4":"3500","n4":"1","s5":"6000","n5":"1","s6":"2000","n6":"1","fot_tax":"48","g1":"1.0","g2":"1.40","g3":"1.20","g4":"1.10","g5":"1.05","g6":"1.05","g7":"1.00","g8":"1.00","g9":"1.00","g10":"1.00","e1":"1.0","e2":"1.05","e3":"1.05","e4":"1.03","e5":"1.03","e6":"1.02","e7":"1.02","e8":"1.02","e9":"1.02","e10":"1.02","iva_r":"16","iva_b":"23","fc":"30","tax":"21","acq":"1.05","amort_y":"10","r_mkt_p":"1000","r_mkt_a":"1500","x_rent":"6000","x_util":"2500","x_maint":"1000","x_it":"500","x_dish":"500","x_cloth":"250","x_chem":"800","x_dez":"500","x_waste":"500","x_misc":"500","x_imi":"700","x_insur":"400","x_lic":"300","x_legal":"500","x_equip":"500","x_train":"200","x_acct":"600","x_bank":"500","x_reserve":"500","b_seats":"60","b_chk_wd":"35","b_chk_we":"45","b_extra":"30","b_rental":"200","b_rental_d":"12","b_cogs":"15","b_adm":"5000","b_mkt_v":"2000","b_start":"8","bs1_sal":"1400","bs1_cnt":"4","bs2_sal":"1800","bs2_cnt":"2","p1i":"30","p2i":"70","p1b":"30","p2b":"70","p1a":"55","p2a":"35","reinvest_before":"0","reinvest_after":"10","horizon":"8"}}
+// === FIREBASE ===
+const firebaseConfig={
+  apiKey:"AIzaSyB19LxA77AtCyA4BXS6zcnbjStXCBLeHng",
+  authDomain:"model-finance-4f24d.firebaseapp.com",
+  databaseURL:"https://model-finance-4f24d-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"model-finance-4f24d",
+  storageBucket:"model-finance-4f24d.firebasestorage.app",
+  messagingSenderId:"786871019514",
+  appId:"1:786871019514:web:8f7cb849be1a7daf55e643"
 };
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+const archRef=db.ref('archive');
+
+const MAX_VERSIONS=10;
+let fbArchive={};
+
+// Load archive from Firebase on start
+function fbLoad(){
+  archRef.on('value',snap=>{
+    fbArchive=snap.val()||{};
+    archRender();
+  });
+}
 
 function getArchive(){
-  const local=JSON.parse(localStorage.getItem('model_archive')||'{}');
-  return{...PRESET_VERSIONS,...local};
+  return fbArchive;
 }
 
 function archSave(){
   const name=$('arch_name')?.value?.trim();
   if(!name){alert('Введите название версии');return}
   const data={};ARCH_INPUTS.forEach(id=>{const el=$(id);if(el)data[id]=el.value});
-  let arch=JSON.parse(localStorage.getItem('model_archive')||'{}');
-  arch[name]={data,date:new Date().toISOString().slice(0,16)};
-  localStorage.setItem('model_archive',JSON.stringify(arch));
+  fbArchive[name]={data,date:new Date().toISOString().slice(0,16)};
+  // Limit to MAX_VERSIONS
+  const keys=Object.keys(fbArchive);
+  if(keys.length>MAX_VERSIONS){
+    const sorted=keys.sort((a,b)=>(fbArchive[a].date||'')>(fbArchive[b].date||'')?1:-1);
+    while(Object.keys(fbArchive).length>MAX_VERSIONS){delete fbArchive[sorted.shift()]}
+  }
+  archRef.set(fbArchive);
   $('arch_name').value='';
-  archRender();
 }
 
 function archLoad(name){
   const arch=getArchive();
   const v=arch[name];if(!v)return;
-  // Temporarily enable all inputs to set values
   const disabled=[];
   ARCH_INPUTS.forEach(id=>{const el=$(id);if(el){if(el.disabled){disabled.push(id);el.disabled=false}if(v.data[id]!==undefined)el.value=v.data[id]}});
   calc();
-  // Re-disable for guests
   disabled.forEach(id=>{const el=$(id);if(el)el.disabled=true});
 }
 
 function archDelete(name){
   if(!confirm('Удалить версию "'+name+'"?'))return;
-  let arch=JSON.parse(localStorage.getItem('model_archive')||'{}');
-  delete arch[name];
-  localStorage.setItem('model_archive',JSON.stringify(arch));
-  archRender();
+  delete fbArchive[name];
+  archRef.set(fbArchive);
 }
 
 function archRender(){
@@ -1206,9 +1228,8 @@ function archRender(){
   $('arch_list').innerHTML=h;
 }
 
-// Auto-apply preset on first load
-archLoad('Торе Мар 3.0');
-archRender();
+calc();
+fbLoad();
 </script>
 </body>
 </html>
