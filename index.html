@@ -75,6 +75,7 @@ tr.month-row.m-total td:first-child{color:var(--accent)}
 .bar{height:100%;border-radius:7px;transition:width .5s}
 .bar.blue{background:linear-gradient(90deg,#1565c0,#42a5f5)}
 .bar.orange{background:linear-gradient(90deg,#e65100,#ffa726)}
+.bar.green{background:linear-gradient(90deg,#2e7d32,#66bb6a)}
 h1{font-size:16px;margin-bottom:3px}
 .subtitle{font-size:11px;color:var(--muted);margin-bottom:16px}
 .collapsible .section-body{display:none}
@@ -308,20 +309,23 @@ h1{font-size:16px;margin-bottom:3px}
 
 <div class="section collapsible"><div class="section-header" onclick="toggle(this)">Партнёрство<span class="toggle-arrow">▼</span></div><div class="section-body">
 <p style="color:var(--accent);font-size:11px;margin-bottom:10px;font-weight:600">1. Доли в инвестициях</p>
-<div class="row"><label>Партнёр 1</label><input type="number" id="p1i" value="30" oninput="calc()"><span class="unit">%</span></div>
-<div class="row"><label>Партнёр 2</label><input type="number" id="p2i" value="70" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label>Партнёр 1 (управляющий)</label><input type="number" id="p1i" value="37" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label>Партнёр 2 (инвестор)</label><input type="number" id="p2i" value="56" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label>Партнёр 3</label><input type="number" id="p3i" value="7" oninput="calc()"><span class="unit">%</span></div>
 <div class="row"><label><b>Контроль (сумма)</b></label><span class="val" id="inv_check"></span></div>
 
 <p style="color:var(--accent);font-size:11px;margin:14px 0 10px;font-weight:600">2. Распределение ЧП до возврата инвестиций</p>
 <div class="row"><label>Реинвестирование в бизнес</label><input type="number" id="reinvest_before" value="0" oninput="calc()"><span class="unit">%</span></div>
-<div class="row"><label>Партнёр 1</label><input type="number" id="p1b" value="30" oninput="calc()"><span class="unit">%</span></div>
-<div class="row"><label>Партнёр 2</label><input type="number" id="p2b" value="70" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label>Партнёр 1</label><input type="number" id="p1b" value="37" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label>Партнёр 2</label><input type="number" id="p2b" value="56" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label>Партнёр 3</label><input type="number" id="p3b" value="7" oninput="calc()"><span class="unit">%</span></div>
 <div class="row"><label><b>Контроль (сумма)</b></label><span class="val" id="before_check"></span></div>
 
 <p style="color:var(--accent);font-size:11px;margin:14px 0 10px;font-weight:600">3. Распределение ЧП после возврата инвестиций</p>
 <div class="row"><label>Реинвестирование в бизнес</label><input type="number" id="reinvest_after" value="10" oninput="calc()"><span class="unit">%</span></div>
-<div class="row"><label>Партнёр 1</label><input type="number" id="p1a" value="55" oninput="calc()"><span class="unit">%</span></div>
-<div class="row"><label>Партнёр 2</label><input type="number" id="p2a" value="35" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label>Партнёр 1</label><input type="number" id="p1a" value="53" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label>Партнёр 2</label><input type="number" id="p2a" value="37" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label>Партнёр 3</label><input type="number" id="p3a" value="0" oninput="calc()"><span class="unit">%</span></div>
 <div class="row"><label><b>Контроль (сумма)</b></label><span class="val" id="after_check"></span></div>
 </div></div>
 </div>
@@ -767,9 +771,9 @@ buildYears();
 const reinvest_before=V('reinvest_before')/100;
 const reinvest_after=V('reinvest_after')/100;
 // Validation checks
-const ic=V('p1i')+V('p2i');$('inv_check').textContent=ic+'%';$('inv_check').style.color=ic===100?'var(--green)':'var(--red)';
-const bc=V('reinvest_before')+V('p1b')+V('p2b');$('before_check').textContent=bc+'%';$('before_check').style.color=bc===100?'var(--green)':'var(--red)';
-const ac=V('reinvest_after')+V('p1a')+V('p2a');$('after_check').textContent=ac+'%';$('after_check').style.color=ac===100?'var(--green)':'var(--red)';
+const ic=V('p1i')+V('p2i')+V('p3i');$('inv_check').textContent=ic+'%';$('inv_check').style.color=ic===100?'var(--green)':'var(--red)';
+const bc=V('reinvest_before')+V('p1b')+V('p2b')+V('p3b');$('before_check').textContent=bc+'%';$('before_check').style.color=bc===100?'var(--green)':'var(--red)';
+const ac=V('reinvest_after')+V('p1a')+V('p2a')+V('p3a');$('after_check').textContent=ac+'%';$('after_check').style.color=ac===100?'var(--green)':'var(--red)';
 const inv_r=V('inv_buyout')+V('inv_legal')+V('inv_renov')+V('inv_design')+V('inv_mkt')+V('inv_furn');
 const inv_b=V('inv_bp')+V('inv_bb');const inv_t=inv_r+inv_b;
 $('inv_rest_total').textContent=fmt(inv_r)+' €';
@@ -891,9 +895,9 @@ for(let yi=0;yi<YEARS.length;yi++){
 }
 
 D={RA,BA,inv_r,inv_b,inv_t,
-  p1i:V('p1i')/100,p2i:V('p2i')/100,
-  p1b:V('p1b')/100,p2b:V('p2b')/100,
-  p1a:V('p1a')/100,p2a:V('p2a')/100,
+  p1i:V('p1i')/100,p2i:V('p2i')/100,p3i:V('p3i')/100,
+  p1b:V('p1b')/100,p2b:V('p2b')/100,p3b:V('p3b')/100,
+  p1a:V('p1a')/100,p2a:V('p2a')/100,p3a:V('p3a')/100,
   reinvest_before,reinvest_after};
 renderDetail('rest-table','rest-kpi',RA,RR);
 renderDetail('banya-table','banya-kpi',BA,BR);
@@ -1016,49 +1020,44 @@ function renderRO(){
 
 function renderPartners(){
   function cp(inv,wB){
-    const p1l=inv*D.p1i,p2l=inv*D.p2i;
-    let p1r=p1l,p2r=p2l,p1dt=0,p2dt=0,p1rt=0,p2rt=0;
-    const p1rows=[],p2rows=[];
-    let p1payback=0,p2payback=0;
+    const totalShare=D.p1i+D.p2i+D.p3i;
+    const p1l=inv*D.p1i,p2l=inv*D.p2i,p3l=inv*D.p3i;
+    let p1r=p1l,p2r=p2l,p3r=p3l,p1dt=0,p2dt=0,p3dt=0,p1rt=0,p2rt=0,p3rt=0;
+    const p1rows=[],p2rows=[],p3rows=[];
+    let p1payback=0,p2payback=0,p3payback=0;
     YEARS.forEach((yr,i)=>{
       const ocf=wB?(D.RA[yr].ocf+D.BA[yr].ocf):D.RA[yr].ocf;
       const np=wB?(D.RA[yr].np+D.BA[yr].np):D.RA[yr].np;
       const nm=MIY[i];
-      const loanPaid=(p1r<=0&&p2r<=0);
-      // P1 return from OCF
-      const ocf1=Math.max(0,ocf)*D.p1i/(D.p1i+D.p2i);
-      const ret1=Math.min(p1r,ocf1);
-      const prevP1=p1r;
+      // Returns from OCF proportional to investment share
+      const ocf1=Math.max(0,ocf)*D.p1i/totalShare;
+      const ret1=Math.min(p1r,ocf1);const prevP1=p1r;
       p1r=Math.max(0,p1r-ret1);p1rt+=ret1;
-      if(prevP1>0&&p1r<=0&&!p1payback){
-        const mtr=prevP1/(ocf1/nm);
-        p1payback=YEARS[0]+i-1+(MS[i]>0?(MS[i]+mtr)/12:mtr/12);
-      }
-      // P2 return from OCF
-      const ocf2=Math.max(0,ocf)*D.p2i/(D.p1i+D.p2i);
-      const ret2=Math.min(p2r,ocf2);
-      const prevP2=p2r;
+      if(prevP1>0&&p1r<=0&&!p1payback){const mtr=prevP1/(ocf1/nm);p1payback=YEARS[0]+i-1+(MS[i]>0?(MS[i]+mtr)/12:mtr/12)}
+      const ocf2=Math.max(0,ocf)*D.p2i/totalShare;
+      const ret2=Math.min(p2r,ocf2);const prevP2=p2r;
       p2r=Math.max(0,p2r-ret2);p2rt+=ret2;
-      if(prevP2>0&&p2r<=0&&!p2payback){
-        const mtr=prevP2/(ocf2/nm);
-        p2payback=YEARS[0]+i-1+(MS[i]>0?(MS[i]+mtr)/12:mtr/12);
-      }
-      // Dividends: different rates before/after loan repayment
+      if(prevP2>0&&p2r<=0&&!p2payback){const mtr=prevP2/(ocf2/nm);p2payback=YEARS[0]+i-1+(MS[i]>0?(MS[i]+mtr)/12:mtr/12)}
+      const ocf3=Math.max(0,ocf)*D.p3i/totalShare;
+      const ret3=Math.min(p3r,ocf3);const prevP3=p3r;
+      p3r=Math.max(0,p3r-ret3);p3rt+=ret3;
+      if(prevP3>0&&p3r<=0&&!p3payback){const mtr=prevP3/(ocf3/nm);p3payback=YEARS[0]+i-1+(MS[i]>0?(MS[i]+mtr)/12:mtr/12)}
+      // Dividends
       const npPlus=Math.max(0,np);
-      let d1,d2;
-      if(p1r<=0&&p2r<=0){
-        // Phase 3: after full repayment
+      let d1,d2,d3;
+      if(p1r<=0&&p2r<=0&&p3r<=0){
         const dist=npPlus*(1-D.reinvest_after);
-        d1=dist*D.p1a; d2=dist*D.p2a;
+        d1=dist*D.p1a;d2=dist*D.p2a;d3=dist*D.p3a;
       } else {
-        // Phase 2: before full repayment — distribute share of NP as partial dividends
         const dist=npPlus*(1-D.reinvest_before);
         d1=p1r<=0?dist*D.p1b:0;
         d2=p2r<=0?dist*D.p2b:0;
+        d3=p3r<=0?dist*D.p3b:0;
       }
-      p1dt+=d1;p2dt+=d2;
+      p1dt+=d1;p2dt+=d2;p3dt+=d3;
       p1rows.push({yr,ocf,ocf_share:ocf1,ret:ret1,rem:p1r,div:d1,cum_div:p1dt,cum_ret:p1rt});
       p2rows.push({yr,ocf,ocf_share:ocf2,ret:ret2,rem:p2r,div:d2,cum_div:p2dt,cum_ret:p2rt});
+      p3rows.push({yr,ocf,ocf_share:ocf3,ret:ret3,rem:p3r,div:d3,cum_div:p3dt,cum_ret:p3rt});
     });
     // Project payback
     let cumCF=0,projPB='>7';
@@ -1077,16 +1076,20 @@ function renderPartners(){
     // Count years with dividends
     const p1divYrs=p1rows.filter(r=>r.div>0).length;
     const p2divYrs=p2rows.filter(r=>r.div>0).length;
+    const p3divYrs=p3rows.filter(r=>r.div>0).length;
     const p1divFrom=p1rows.find(r=>r.div>0)?.yr||0;
     const p2divFrom=p2rows.find(r=>r.div>0)?.yr||0;
+    const p3divFrom=p3rows.find(r=>r.div>0)?.yr||0;
     const p1divTo=p1rows.filter(r=>r.div>0).pop()?.yr||0;
     const p2divTo=p2rows.filter(r=>r.div>0).pop()?.yr||0;
-    return{p1l,p2l,p1rt,p2rt,p1dt,p2dt,
-      p1roi:p1l?p1dt/p1l:0,p2roi:p2l?p2dt/p2l:0,
+    const p3divTo=p3rows.filter(r=>r.div>0).pop()?.yr||0;
+    return{p1l,p2l,p3l,p1rt,p2rt,p3rt,p1dt,p2dt,p3dt,
+      p1roi:p1l?p1dt/p1l:0,p2roi:p2l?p2dt/p2l:0,p3roi:p3l?p3dt/p3l:0,
       p1payback:p1payback?(p1payback-YEARS[0]+1).toFixed(1):'>10',
       p2payback:p2payback?(p2payback-YEARS[0]+1).toFixed(1):'>10',
-      p1divYrs,p2divYrs,p1divFrom,p1divTo,p2divFrom,p2divTo,
-      p1rows,p2rows,projPB};
+      p3payback:p3payback?(p3payback-YEARS[0]+1).toFixed(1):'>10',
+      p1divYrs,p2divYrs,p3divYrs,p1divFrom,p1divTo,p2divFrom,p2divTo,p3divFrom,p3divTo,
+      p1rows,p2rows,p3rows,projPB};
   }
   const cb=cp(D.inv_t,true),nb=cp(D.inv_r,false);
 
@@ -1124,14 +1127,16 @@ function renderPartners(){
   function scenario(title,p){
     let h=`<h2 style="color:var(--accent);margin:20px 0 10px;font-size:14px">${title}</h2>`;
     h+=`<div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px">
-      <div class="kpi"><div class="label">Общие инвестиции</div><div class="value">${fmt(p.p1l+p.p2l)} €</div></div>
+      <div class="kpi"><div class="label">Общие инвестиции</div><div class="value">${fmt(p.p1l+p.p2l+p.p3l)} €</div></div>
       <div class="kpi"><div class="label">Окупаемость проекта</div><div class="value accent">${p.projPB} лет</div></div>
-      <div class="kpi"><div class="label">Дивиденды${p.p1divYrs>0?` (${p.p1divFrom}–${p.p1divTo})`:''}</div><div class="value green">${fmt(p.p1dt+p.p2dt)} €</div></div>
+      <div class="kpi"><div class="label">Дивиденды${p.p1divYrs>0?` (${p.p1divFrom}–${p.p1divTo})`:''}</div><div class="value green">${fmt(p.p1dt+p.p2dt+p.p3dt)} €</div></div>
     </div>`;
     const p1desc=`Партнёр 1 — вклад ${(D.p1i*100).toFixed(0)}%, до возврата ${(D.p1b*100).toFixed(0)}%, после возврата ${(D.p1a*100).toFixed(0)}%`;
     const p2desc=`Партнёр 2 — вклад ${(D.p2i*100).toFixed(0)}%, до возврата ${(D.p2b*100).toFixed(0)}%, после возврата ${(D.p2a*100).toFixed(0)}%`;
+    const p3desc=`Партнёр 3 — вклад ${(D.p3i*100).toFixed(0)}%, до возврата ${(D.p3b*100).toFixed(0)}%, после возврата ${(D.p3a*100).toFixed(0)}%`;
     h+=partnerBlock(title,p1desc,p.p1l,p.p1rt,p.p1dt,p.p1roi,p.p1payback,p.p1divYrs,p.p1divFrom,p.p1divTo,p.p1rows,'var(--accent)','blue');
     h+=partnerBlock(title,p2desc,p.p2l,p.p2rt,p.p2dt,p.p2roi,p.p2payback,p.p2divYrs,p.p2divFrom,p.p2divTo,p.p2rows,'var(--orange)','orange');
+    if(D.p3i>0)h+=partnerBlock(title,p3desc,p.p3l,p.p3rt,p.p3dt,p.p3roi,p.p3payback,p.p3divYrs,p.p3divFrom,p.p3divTo,p.p3rows,'var(--green)','green');
     return h;
   }
 
@@ -1150,7 +1155,7 @@ const ARCH_INPUTS=['inv_buyout','inv_legal','inv_renov','inv_design','inv_mkt','
   'x_imi','x_insur','x_lic','x_legal','x_equip','x_train','x_acct','x_bank','x_reserve',
   'b_seats','b_chk_wd','b_chk_we','b_extra','b_rental','b_rental_d','b_cogs','b_adm','b_mkt_v','b_start',
   'bs1_sal','bs1_cnt','bs2_sal','bs2_cnt',
-  'p1i','p2i','p1b','p2b','p1a','p2a','reinvest_before','reinvest_after','horizon'];
+  'p1i','p2i','p3i','p1b','p2b','p3b','p1a','p2a','p3a','reinvest_before','reinvest_after','horizon'];
 
 // === FIREBASE ===
 const firebaseConfig={
