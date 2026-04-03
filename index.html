@@ -1529,7 +1529,7 @@ function archRender(){
   $('arch_list').innerHTML=h;
 }
 
-calc();
+try{calc()}catch(e){console.error('calc error:',e);alert('Ошибка расчёта: '+e.message)}
 fbLoad();
 </script>
 </body>
