@@ -1013,10 +1013,10 @@ for(let yi=0;yi<YEARS.length;yi++){
     const bRevM=(bVisitors*(bcw+bex)*wd+bVisitors*(bce+bex)*we+br*brd);
     const bRnM=bRevM/(1+ib);
     const cv=bRnM*bcg,av=bRnM*aq;
-    const bce=cumExp[yi]; // expense growth for banya too
-    const bem=bRnM-cv-av-bft*bce-bad*bce-bmk*bce;
+    const bExpG=cumExp[yi]; // expense growth for banya too
+    const bem=bRnM-cv-av-bft*bExpG-bad*bExpG-bmk*bExpG;
     const bpt=bem-bam,btx=Math.max(bpt*tx,0);
-    bmd.push({month:MN[mi],rev:bRnM,cogs:-cv,fot:-bft*bce,adm_v:-bad*bce,mkt_v:-bmk*bce,acq_v:-av,
+    bmd.push({month:MN[mi],rev:bRnM,cogs:-cv,fot:-bft*bExpG,adm_v:-bad*bExpG,mkt_v:-bmk*bExpG,acq_v:-av,
       eb:bem,amort:-bam,tax_v:-btx,np:bem-bam-btx,ocf:bem-btx});
   }
   cmI+=nmx;
