@@ -224,6 +224,33 @@ h1{font-size:16px;margin-bottom:3px}
 <div class="row"><label>Налоги на ФОТ</label><input type="number" id="fot_tax" value="48" oninput="calc()"><span class="unit">%</span></div>
 <div class="row"><label><b>ФОТ операц. / офисный</b></label><span class="val accent" id="fot_info"></span></div>
 <div class="row"><label><b>ИТОГО ФОТ с налогами</b></label><span class="val green" id="fot_total"></span></div>
+<p style="color:var(--accent);font-size:11px;margin:12px 0 6px;font-weight:600">Кол-во операц. персонала по месяцам (ставки фиксированы)</p>
+<p style="color:var(--muted);font-size:10px;margin-bottom:6px">Базовое кол-во = сумма сотрудников выше. Можно уменьшить зимой, увеличить летом.</p>
+<div class="season-grid">
+<div class="ml">Янв</div><div class="ml">Фев</div><div class="ml">Мар</div><div class="ml">Апр</div><div class="ml">Май</div><div class="ml">Июн</div>
+<div class="ml">Июл</div><div class="ml">Авг</div><div class="ml">Сен</div><div class="ml">Окт</div><div class="ml">Ноя</div><div class="ml">Дек</div>
+<input type="number" id="fs1" value="20" oninput="calc()">
+<input type="number" id="fs2" value="20" oninput="calc()">
+<input type="number" id="fs3" value="22" oninput="calc()">
+<input type="number" id="fs4" value="24" oninput="calc()">
+<input type="number" id="fs5" value="24" oninput="calc()">
+<input type="number" id="fs6" value="26" oninput="calc()">
+<input type="number" id="fs7" value="26" oninput="calc()">
+<input type="number" id="fs8" value="26" oninput="calc()">
+<input type="number" id="fs9" value="24" oninput="calc()">
+<input type="number" id="fs10" value="24" oninput="calc()">
+<input type="number" id="fs11" value="20" oninput="calc()">
+<input type="number" id="fs12" value="20" oninput="calc()">
+</div>
+<p style="color:var(--muted);margin-top:6px;font-size:10px">ФОТ/мес (справочно):</p>
+<div class="season-grid" style="margin-top:4px">
+<div class="ml">Янв</div><div class="ml">Фев</div><div class="ml">Мар</div><div class="ml">Апр</div><div class="ml">Май</div><div class="ml">Июн</div>
+<div class="ml">Июл</div><div class="ml">Авг</div><div class="ml">Сен</div><div class="ml">Окт</div><div class="ml">Ноя</div><div class="ml">Дек</div>
+<span id="fc1" class="val" style="font-size:10px"></span><span id="fc2" class="val" style="font-size:10px"></span><span id="fc3" class="val" style="font-size:10px"></span>
+<span id="fc4" class="val" style="font-size:10px"></span><span id="fc5" class="val" style="font-size:10px"></span><span id="fc6" class="val" style="font-size:10px"></span>
+<span id="fc7" class="val" style="font-size:10px"></span><span id="fc8" class="val" style="font-size:10px"></span><span id="fc9" class="val" style="font-size:10px"></span>
+<span id="fc10" class="val" style="font-size:10px"></span><span id="fc11" class="val" style="font-size:10px"></span><span id="fc12" class="val" style="font-size:10px"></span>
+</div>
 </div></div>
 
 <div class="section collapsible"><div class="section-header" onclick="toggle(this)">Рост год к году (только ресторан)<span class="toggle-arrow">▼</span></div><div class="section-body">
@@ -249,12 +276,13 @@ h1{font-size:16px;margin-bottom:3px}
 <div class="row"><label>Налог на прибыль</label><input type="number" id="tax" value="21" oninput="calc()"><span class="unit">%</span></div>
 <div class="row"><label>Эквайринг</label><input type="number" id="acq" value="1.05" step="0.1" oninput="calc()"><span class="unit">%</span></div>
 <div class="row"><label>Амортизация</label><input type="number" id="amort_y" value="10" oninput="calc()"><span class="unit">лет</span></div>
-<div class="row"><label>Маркетинг (полиграфия)</label><input type="number" id="r_mkt_p" value="1000" oninput="calc()"><span class="unit">€/м</span></div>
-<div class="row"><label>Маркетинг (реклама)</label><input type="number" id="r_mkt_a" value="1500" oninput="calc()"><span class="unit">€/м</span></div>
 </div></div>
 
 <div class="section collapsible"><div class="section-header" onclick="toggle(this)">Адм. и прочие расходы ресторана (€/мес)<span class="toggle-arrow">▼</span></div><div class="section-body">
-<p style="color:var(--accent);font-size:11px;margin-bottom:8px;font-weight:600">Административные</p>
+<p style="color:var(--accent);font-size:11px;margin-bottom:8px;font-weight:600">Маркетинг</p>
+<div class="row"><label>Маркетинг (полиграфия)</label><input type="number" id="r_mkt_p" value="1000" oninput="calc()"><span class="unit">€</span></div>
+<div class="row"><label>Маркетинг (реклама)</label><input type="number" id="r_mkt_a" value="1500" oninput="calc()"><span class="unit">€</span></div>
+<p style="color:var(--accent);font-size:11px;margin:12px 0 8px;font-weight:600">Административные</p>
 <div class="row"><label>Аренда помещения</label><input type="number" id="x_rent" value="6000" oninput="calc()"><span class="unit">€</span></div>
 <div class="row"><label>Коммуналка (газ, электр., вода)</label><input type="number" id="x_util" value="2500" oninput="calc()"><span class="unit">€</span></div>
 <div class="row"><label>Эксплуатация помещения</label><input type="number" id="x_maint" value="1000" oninput="calc()"><span class="unit">€</span></div>
@@ -429,7 +457,9 @@ const XS={
   headerL:{font:{bold:true,sz:10,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'0D47A1'}},alignment:{horizontal:'left'}},
   section:{font:{bold:true,sz:10,color:{rgb:'0D47A1'}},fill:{fgColor:{rgb:'D6E4F0'}}},
   keyPos:{font:{bold:true,sz:10,color:{rgb:'2E7D32'}},fill:{fgColor:{rgb:'E8F5E9'}},numFmt:'#,##0'},
-  keyNeg:{font:{bold:true,sz:10,color:{rgb:'C62828'}},fill:{fgColor:{rgb:'FFEBEE'}},numFmt:'#,##0'},
+  keyNeg:{font:{bold:true,sz:10,color:{rgb:'FF0000'}},fill:{fgColor:{rgb:'E8F5E9'}},numFmt:'#,##0'},
+  cfPos:{font:{bold:true,sz:10,color:{rgb:'0D47A1'}},fill:{fgColor:{rgb:'D6E4F0'}},numFmt:'#,##0'},
+  cfNeg:{font:{bold:true,sz:10,color:{rgb:'FF0000'}},fill:{fgColor:{rgb:'D6E4F0'}},numFmt:'#,##0'},
   total:{font:{bold:true,sz:10},fill:{fgColor:{rgb:'E3F2FD'}},numFmt:'#,##0'},
   dim:{font:{sz:10,color:{rgb:'666666'}},numFmt:'#,##0'},
   normal:{font:{sz:10},numFmt:'#,##0'},
@@ -497,8 +527,10 @@ function tblToStyledSheet(tid,name,includeHidden){
       else if(type==='m')st=XS.monthDim;
       else if(type==='mk'){const v=ws[ref]?.v;st=(typeof v==='number'&&v<0)?XS.monthKeyN:XS.monthKey}
       else if(type==='mt')st=XS.total;
-      else if(type==='keyP')st=C===0?{...XS.keyPos,alignment:{horizontal:'left'}}:XS.keyPos;
-      else if(type==='keyN')st=C===0?{...XS.keyNeg,alignment:{horizontal:'left'}}:XS.keyNeg;
+      else if(type==='keyP'||type==='keyN'){
+        const v=ws[ref]?.v;const neg=typeof v==='number'&&v<0;
+        st=C===0?{...(neg?XS.keyNeg:XS.keyPos),alignment:{horizontal:'left'}}:(neg?XS.keyNeg:XS.keyPos);
+      }
       else st=C===0?{...XS.dim,alignment:{horizontal:'left'}}:XS.dim;
       applySt(ws,ref,st);
     }
@@ -629,7 +661,77 @@ function exportFull(){
   XLSX.utils.book_append_sheet(wb,tblToStyledSheet('ro-table',name+' — Без бани',true),'Без бани');
   XLSX.utils.book_append_sheet(wb,tblToStyledSheet('comb-table',name+' — С баней',true),'С баней');
   XLSX.utils.book_append_sheet(wb,partnersSheet(name),'Партнёры');
+  XLSX.utils.book_append_sheet(wb,analysisSheet(name),'Анализ');
   XLSX.writeFile(wb,`${name}_Модель_${date}.xlsx`);
+}
+
+function analysisSheet(name){
+  const aoa=[[name+' — Анализ'],[]];
+  const meta=['title','empty'];
+  // Grab data from analysis panel
+  // Breakeven KPIs
+  const beKpi=$('be-kpi');
+  if(beKpi){
+    aoa.push(['Breakeven анализ']);meta.push('section');
+    beKpi.querySelectorAll('.kpi').forEach(k=>{
+      const l=k.querySelector('.label')?.textContent||'';
+      const v=k.querySelector('.value')?.textContent||'';
+      const s=k.querySelector('.sub')?.textContent||'';
+      aoa.push([l,v,s]);meta.push('keyP');
+    });
+    aoa.push([]);meta.push('empty');
+  }
+  const beDet=$('be-detail');
+  if(beDet){
+    beDet.querySelectorAll('.kpi').forEach(k=>{
+      const l=k.querySelector('.label')?.textContent||'';
+      const v=k.querySelector('.value')?.textContent||'';
+      aoa.push([l,v]);meta.push('dim');
+    });
+    aoa.push([]);meta.push('empty');
+  }
+  // Sensitivity EBITDA matrix
+  const sensT=$('sens-ebitda');
+  if(sensT){
+    aoa.push(['Матрица EBITDA (ср. чек × оборачиваемость)']);meta.push('section');
+    sensT.querySelectorAll('tr').forEach(tr=>{
+      const r=[];const isTh=!!tr.querySelector('th');
+      tr.querySelectorAll('th,td').forEach(d=>{
+        let t=d.textContent.trim().replace(/\s/g,' ');
+        const n=parseFloat(t.replace(/[^\d.,-]/g,'').replace(',','.'));
+        r.push(!isNaN(n)&&t.match(/^[\d\s.,-]+[€]?$/)?n:t);
+      });
+      aoa.push(r);meta.push(isTh?'h':'dim');
+    });
+    aoa.push([]);meta.push('empty');
+  }
+  // Payback matrix
+  const pbT=$('sens-payback');
+  if(pbT){
+    aoa.push(['Матрица окупаемости (ср. чек × оборачиваемость)']);meta.push('section');
+    pbT.querySelectorAll('tr').forEach(tr=>{
+      const r=[];const isTh=!!tr.querySelector('th');
+      tr.querySelectorAll('th,td').forEach(d=>r.push(d.textContent.trim()));
+      aoa.push(r);meta.push(isTh?'h':'dim');
+    });
+  }
+  const ws=XLSX.utils.aoa_to_sheet(aoa);
+  const range=XLSX.utils.decode_range(ws['!ref']||'A1');
+  for(let R=range.s.r;R<=range.e.r;R++){
+    const type=meta[R]||'dim';
+    for(let C=range.s.c;C<=range.e.c;C++){
+      const ref=XLSX.utils.encode_cell({r:R,c:C});
+      let st;
+      if(type==='title')st=XS.title;
+      else if(type==='section')st=XS.section;
+      else if(type==='h')st=C===0?XS.headerL:XS.header;
+      else if(type==='keyP')st=XS.keyPos;
+      else st=XS.dim;
+      applySt(ws,ref,st);
+    }
+  }
+  ws['!cols']=[{wch:35},{wch:18},{wch:18},{wch:14},{wch:14},{wch:14},{wch:14},{wch:14},{wch:14}];
+  return ws;
 }
 
 async function makeChart(canvasId,labels,datasets,title){
@@ -801,9 +903,21 @@ const office=[[V('s5'),V('n5')],[V('s6'),V('n6')]];
 let fo=0,ff=0;
 staff.forEach(([s,n],i)=>{const t=s*n;$('st'+(i+1)).textContent=fmt(t);fo+=t});
 office.forEach(([s,n],i)=>{const t=s*n;$('st'+(i+5)).textContent=fmt(t);ff+=t});
-const r_fot=fo*(1+ft),r_ofot=ff*(1+ft);
-$('fot_info').textContent=fmt(r_fot)+' / '+fmt(r_ofot)+' €';
-$('fot_total').textContent=fmt(r_fot+r_ofot)+' €';
+const r_ofot=ff*(1+ft);
+// Seasonal staff: base total headcount and per-person avg cost
+const baseHeadcount=staff.reduce((s,[,n])=>s+n,0);
+const avgCostPerPerson=baseHeadcount>0?fo/baseHeadcount:0;
+// Read monthly headcount
+const staffMonthly=[];
+for(let i=1;i<=12;i++){
+  const cnt=V('fs'+i);
+  staffMonthly.push(cnt);
+  const monthFot=cnt*avgCostPerPerson*(1+ft);
+  const el=$('fc'+i);if(el)el.textContent=fmt(monthFot);
+}
+const r_fot=baseHeadcount>0?fo/baseHeadcount*(1+ft):0; // per-person FOT with tax (will multiply by monthly count)
+$('fot_info').textContent=fmt(fo*(1+ft))+' / '+fmt(r_ofot)+' €';
+$('fot_total').textContent=fmt(fo*(1+ft)+r_ofot)+' €';
 
 const ir=V('iva_r')/100,ib=V('iva_b')/100,fc=V('fc')/100,tx=V('tax')/100,aq=V('acq')/100,ay=V('amort_y');
 const seats=V('r_seats');
@@ -878,9 +992,10 @@ for(let yi=0;yi<YEARS.length;yi++){
     const rn=rg/(1+ir);
     const food=rn*fc,acqv=rn*aq;
     const ce=cumExp[yi]; // expense growth multiplier
-    const ebm=rn-food-acqv-r_fot*ce-r_ofot*ce-rm*ce-rx*ce;
+    const monthFot=staffMonthly[mi]*avgCostPerPerson*(1+ft); // seasonal FOT
+    const ebm=rn-food-acqv-monthFot*ce-r_ofot*ce-rm*ce-rx*ce;
     const pt=ebm-ram,txm=Math.max(pt*tx,0),npm=ebm-ram-txm,ocfm=ebm-txm;
-    rmd.push({month:MN[mi],rev:rn,food:-food,fot:-r_fot*ce,ofot:-r_ofot*ce,mkt:-rm*ce,
+    rmd.push({month:MN[mi],rev:rn,food:-food,fot:-monthFot*ce,ofot:-r_ofot*ce,mkt:-rm*ce,
       adm:-rx*ce,eb:ebm,amort:-ram,tax_v:-txm,np:npm,ocf:ocfm});
   }
   const sm=k=>rmd.reduce((s,m)=>s+m[k],0);
@@ -898,9 +1013,10 @@ for(let yi=0;yi<YEARS.length;yi++){
     const bRevM=(bVisitors*(bcw+bex)*wd+bVisitors*(bce+bex)*we+br*brd);
     const bRnM=bRevM/(1+ib);
     const cv=bRnM*bcg,av=bRnM*aq;
-    const bem=bRnM-cv-av-bft-bad-bmk;
+    const bce=cumExp[yi]; // expense growth for banya too
+    const bem=bRnM-cv-av-bft*bce-bad*bce-bmk*bce;
     const bpt=bem-bam,btx=Math.max(bpt*tx,0);
-    bmd.push({month:MN[mi],rev:bRnM,cogs:-cv,fot:-bft,adm_v:-bad,mkt_v:-bmk,acq_v:-av,
+    bmd.push({month:MN[mi],rev:bRnM,cogs:-cv,fot:-bft*bce,adm_v:-bad*bce,mkt_v:-bmk*bce,acq_v:-av,
       eb:bem,amort:-bam,tax_v:-btx,np:bem-bam-btx,ocf:bem-btx});
   }
   cmI+=nmx;
@@ -1140,23 +1256,42 @@ function renderPartners(){
     return h;
   }
 
-  function scenario(title,p){
-    let h=`<h2 style="color:var(--accent);margin:20px 0 10px;font-size:14px">${title}</h2>`;
-    h+=`<div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px">
-      <div class="kpi"><div class="label">Общие инвестиции</div><div class="value">${fmt(p.p1l+p.p2l+p.p3l)} €</div></div>
-      <div class="kpi"><div class="label">Окупаемость проекта</div><div class="value accent">${p.projPB} лет</div></div>
-      <div class="kpi"><div class="label">Дивиденды${p.p1divYrs>0?` (${p.p1divFrom}–${p.p1divTo})`:''}</div><div class="value green">${fmt(p.p1dt+p.p2dt+p.p3dt)} €</div></div>
-    </div>`;
-    const p1desc=`Партнёр 1 — вклад ${(D.p1i*100).toFixed(0)}%, до возврата ${(D.p1b*100).toFixed(0)}%, после возврата ${(D.p1a*100).toFixed(0)}%`;
-    const p2desc=`Партнёр 2 — вклад ${(D.p2i*100).toFixed(0)}%, до возврата ${(D.p2b*100).toFixed(0)}%, после возврата ${(D.p2a*100).toFixed(0)}%`;
-    const p3desc=`Партнёр 3 — вклад ${(D.p3i*100).toFixed(0)}%, до возврата ${(D.p3b*100).toFixed(0)}%, после возврата ${(D.p3a*100).toFixed(0)}%`;
-    h+=partnerBlock(title,p1desc,p.p1l,p.p1rt,p.p1dt,p.p1roi,p.p1payback,p.p1divYrs,p.p1divFrom,p.p1divTo,p.p1rows,'var(--accent)','blue');
-    h+=partnerBlock(title,p2desc,p.p2l,p.p2rt,p.p2dt,p.p2roi,p.p2payback,p.p2divYrs,p.p2divFrom,p.p2divTo,p.p2rows,'var(--orange)','orange');
-    if(D.p3i>0)h+=partnerBlock(title,p3desc,p.p3l,p.p3rt,p.p3dt,p.p3roi,p.p3payback,p.p3divYrs,p.p3divFrom,p.p3divTo,p.p3rows,'var(--green)','green');
+  function partnerSection(num,name,color,barClass,nbData,cbData,iKey,bKey,aKey){
+    const nbL=nbData['p'+num+'l'],cbL=cbData['p'+num+'l'];
+    const nbRt=nbData['p'+num+'rt'],cbRt=cbData['p'+num+'rt'];
+    const nbDt=nbData['p'+num+'dt'],cbDt=cbData['p'+num+'dt'];
+    const nbRoi=nbData['p'+num+'roi'],cbRoi=cbData['p'+num+'roi'];
+    const nbPb=nbData['p'+num+'payback'],cbPb=cbData['p'+num+'payback'];
+    const nbDivYrs=nbData['p'+num+'divYrs'],cbDivYrs=cbData['p'+num+'divYrs'];
+    const nbDivFrom=nbData['p'+num+'divFrom'],cbDivFrom=cbData['p'+num+'divFrom'];
+    const nbDivTo=nbData['p'+num+'divTo'],cbDivTo=cbData['p'+num+'divTo'];
+    const nbRows=nbData['p'+num+'rows'],cbRows=cbData['p'+num+'rows'];
+    const desc=`${name} — вклад ${(D[iKey]*100).toFixed(0)}%, до возврата ${(D[bKey]*100).toFixed(0)}%, после возврата ${(D[aKey]*100).toFixed(0)}%`;
+
+    let h=`<h2 style="color:${color};margin:20px 0 10px;font-size:14px;border-bottom:2px solid ${color};padding-bottom:6px">${name}</h2>`;
+    h+=partnerBlock('БЕЗ БАНИ',desc,nbL,nbRt,nbDt,nbRoi,nbPb,nbDivYrs,nbDivFrom,nbDivTo,nbRows,color,barClass);
+    h+=partnerBlock('С БАНЕЙ',desc,cbL,cbRt,cbDt,cbRoi,cbPb,cbDivYrs,cbDivFrom,cbDivTo,cbRows,color,barClass);
     return h;
   }
 
-  $('partners-content').innerHTML=scenario('БЕЗ БАНИ',nb)+scenario('С БАНЕЙ',cb);
+  let html='';
+  // Project overview
+  html+=`<div class="kpi-grid" style="grid-template-columns:repeat(2,1fr);margin-bottom:14px">
+    <div class="section"><div class="section-header" style="cursor:default">Без бани</div><div class="section-body">
+      <div class="row"><label>Инвестиции</label><span class="val">${fmt(nb.p1l+nb.p2l+nb.p3l)} €</span></div>
+      <div class="row"><label>Окупаемость</label><span class="val accent">${nb.projPB} лет</span></div>
+    </div></div>
+    <div class="section"><div class="section-header" style="cursor:default">С баней</div><div class="section-body">
+      <div class="row"><label>Инвестиции</label><span class="val">${fmt(cb.p1l+cb.p2l+cb.p3l)} €</span></div>
+      <div class="row"><label>Окупаемость</label><span class="val accent">${cb.projPB} лет</span></div>
+    </div></div>
+  </div>`;
+
+  html+=partnerSection(1,'Партнёр 1 (управляющий)','var(--accent)','blue',nb,cb,'p1i','p1b','p1a');
+  html+=partnerSection(2,'Партнёр 2 (инвестор)','var(--orange)','orange',nb,cb,'p2i','p2b','p2a');
+  if(D.p3i>0)html+=partnerSection(3,'Партнёр 3','var(--green)','green',nb,cb,'p3i','p3b','p3a');
+
+  $('partners-content').innerHTML=html;
 }
 
 function renderAnalysis(){
@@ -1192,20 +1327,41 @@ function renderAnalysis(){
   const beF=curRev*varMarginPct>0?fixedCosts/(curRev*varMarginPct):null;
   const beOborach=beF!==null?avgSeason*beF:null;
 
+  // Breakeven by NP=0: NP = EBITDA - amort - tax
+  // NP = EBITDA - amort - max((EBITDA-amort)*taxRate, 0) = 0
+  // If EBITDA > amort: (EBITDA-amort)*(1-taxRate) = 0 => EBITDA = amort
+  // So NP breakeven EBITDA = amortization
+  const amortYear=D.inv_r/(V('amort_y'));
+  const taxRate=V('tax')/100;
+  // NP=0 when EBITDA = amort (if EBITDA > amort, tax kicks in)
+  // f*curRev*varMarginPct - fixedCosts = amortYear
+  // f = (fixedCosts + amortYear) / (curRev*varMarginPct)
+  const beFnp=curRev*varMarginPct>0?(fixedCosts+amortYear)/(curRev*varMarginPct):null;
+  const beOborachNP=beFnp!==null?avgSeason*beFnp:null;
+  const curNP=D.RA[stabYr]?.np||0;
+
   $('be-kpi').innerHTML=`
-    <div class="kpi"><div class="label">Breakeven оборачиваемость (год ${stabYr})</div>
-      <div class="value ${beOborach!==null&&beOborach<avgSeason?'green':'red'}" style="font-size:24px">${beOborach!==null?beOborach.toFixed(2)+'×':'N/A'}</div>
-      <div class="sub">Текущая средняя: ${avgSeason.toFixed(2)}× | Запас: ${beOborach!==null?(((avgSeason-beOborach)/avgSeason)*100).toFixed(0)+'%':'N/A'}</div></div>
-    <div class="kpi"><div class="label">Breakeven чеков/день</div>
-      <div class="value accent" style="font-size:24px">${beOborach!==null?Math.round(seats*beOborach):'N/A'}</div>
-      <div class="sub">Текущий: ${Math.round(seats*avgSeason)}/день</div></div>
+    <div class="kpi"><div class="label">Breakeven EBITDA=0 (год ${stabYr})</div>
+      <div class="value ${beOborach!==null&&beOborach<avgSeason?'green':'red'}" style="font-size:22px">${beOborach!==null?beOborach.toFixed(2)+'×':'N/A'}</div>
+      <div class="sub">Оборач. при EBITDA=0 | Запас: ${beOborach!==null?(((avgSeason-beOborach)/avgSeason)*100).toFixed(0)+'%':'N/A'}</div></div>
+    <div class="kpi"><div class="label">Breakeven ЧП=0 (год ${stabYr})</div>
+      <div class="value ${beOborachNP!==null&&beOborachNP<avgSeason?'green':'red'}" style="font-size:22px">${beOborachNP!==null?beOborachNP.toFixed(2)+'×':'N/A'}</div>
+      <div class="sub">Оборач. при ЧП=0 | Запас: ${beOborachNP!==null?(((avgSeason-beOborachNP)/avgSeason)*100).toFixed(0)+'%':'N/A'}</div></div>
+    <div class="kpi"><div class="label">Текущая оборач. (средняя)</div>
+      <div class="value accent" style="font-size:22px">${avgSeason.toFixed(2)}×</div>
+      <div class="sub">${Math.round(seats*avgSeason)} чеков/день</div></div>
     <div class="kpi"><div class="label">EBITDA год ${stabYr}</div>
-      <div class="value ${curEB>=0?'green':'red'}" style="font-size:24px">${fmt(curEB)} €</div>
-      <div class="sub">Margin: ${curRev?((curEB/curRev)*100).toFixed(1)+'%':'0%'}</div></div>`;
+      <div class="value ${curEB>=0?'green':'red'}" style="font-size:22px">${fmt(curEB)} €</div>
+      <div class="sub">Margin: ${curRev?((curEB/curRev)*100).toFixed(1)+'%':'0%'}</div></div>
+    <div class="kpi"><div class="label">ЧП год ${stabYr}</div>
+      <div class="value ${curNP>=0?'green':'red'}" style="font-size:22px">${fmt(curNP)} €</div>
+      <div class="sub">Margin: ${curRev?((curNP/curRev)*100).toFixed(1)+'%':'0%'}</div></div>`;
 
   $('be-detail').innerHTML=`
-    <div class="kpi"><div class="label">Выручка при Breakeven</div><div class="value accent">${beF!==null?fmt(curRev*beF):'—'} €</div></div>
-    <div class="kpi"><div class="label">Фиксированные расходы/год</div><div class="value">${fmt(fixedCosts)} €</div><div class="sub">${fmt(fixedCosts/12)} €/мес</div></div>`;
+    <div class="kpi"><div class="label">Выручка при EBITDA=0</div><div class="value accent">${beF!==null?fmt(curRev*beF):'—'} €</div></div>
+    <div class="kpi"><div class="label">Выручка при ЧП=0</div><div class="value accent">${beFnp!==null?fmt(curRev*beFnp):'—'} €</div></div>
+    <div class="kpi"><div class="label">Фикс. расходы/год</div><div class="value">${fmt(fixedCosts)} €</div><div class="sub">${fmt(fixedCosts/12)} €/мес</div></div>
+    <div class="kpi"><div class="label">Амортизация/год</div><div class="value">${fmt(amortYear)} €</div><div class="sub">${fmt(amortYear/12)} €/мес</div></div>`;
 
   // Sensitivity matrix: avg check change × oborach change → annual EBITDA
   const checkSteps=[-30,-20,-10,0,10,20,30];
@@ -1271,6 +1427,7 @@ const ARCH_INPUTS=['inv_buyout','inv_legal','inv_renov','inv_design','inv_mkt','
   'rs1','rs2','rs3','rs4','rs5','rs6','rs7','rs8','rs9','rs10','rs11','rs12',
   'bs1','bs2','bs3','bs4','bs5','bs6','bs7','bs8','bs9','bs10','bs11','bs12',
   's1','n1','s2','n2','s3','n3','s4','n4','s5','n5','s6','n6','fot_tax',
+  'fs1','fs2','fs3','fs4','fs5','fs6','fs7','fs8','fs9','fs10','fs11','fs12',
   'g1','g2','g3','g4','g5','g6','g7','g8','g9','g10',
   'e1','e2','e3','e4','e5','e6','e7','e8','e9','e10',
   'iva_r','iva_b','fc','tax','acq','amort_y','r_mkt_p','r_mkt_a',
@@ -1344,6 +1501,17 @@ function archDelete(name){
   archRef.set(fbArchive);
 }
 
+function archRename(oldName){
+  let newName=prompt('Новое название:',oldName);
+  if(!newName||newName===oldName)return;
+  newName=newName.replace(/[.#$/\[\]]/g,'-');
+  if(fbArchive[oldName]){
+    fbArchive[newName]=fbArchive[oldName];
+    delete fbArchive[oldName];
+    archRef.set(fbArchive);
+  }
+}
+
 function archRender(){
   const arch=getArchive();
   const keys=Object.keys(arch);
@@ -1355,7 +1523,7 @@ function archRender(){
       <span style="flex:1;font-size:11px;color:var(--text)">${name}</span>
       <span style="font-size:9px;color:var(--dim)">${d}</span>
       <button class="btn" style="padding:3px 8px;font-size:10px" onclick="archLoad('${name}')">Применить</button>
-      ${userRole==='admin'?'<button class="btn" style="padding:3px 8px;font-size:10px;background:#c62828" onclick="archDelete(\''+name+'\')">×</button>':''}
+      ${userRole==='admin'?'<button class="btn" style="padding:3px 8px;font-size:10px;background:#2a3a4a" onclick="archRename(\''+name+'\')">✎</button><button class="btn" style="padding:3px 8px;font-size:10px;background:#c62828" onclick="archDelete(\''+name+'\')">×</button>':''}
     </div>`;
   });
   $('arch_list').innerHTML=h;
