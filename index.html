@@ -117,6 +117,7 @@ h1{font-size:16px;margin-bottom:3px}
 <div class="nav-item" onclick="showPanel('restonly')"><span>📋</span> Результаты без бани</div>
 <div class="nav-item" onclick="showPanel('combined')"><span>📊</span> Результаты с баней</div>
 <div class="nav-item" onclick="showPanel('partners')"><span>🤝</span> Партнёры</div>
+<div class="nav-item" onclick="showPanel('analysis')"><span>📈</span> Анализ</div>
 <div class="nav-item" onclick="doLogout()" style="margin-top:auto;color:var(--dim)"><span>🚪</span> Выйти</div>
 </div>
 <div class="main">
@@ -349,6 +350,19 @@ h1{font-size:16px;margin-bottom:3px}
 <div id="partners" class="panel"><h1>Партнёры</h1><p class="subtitle">Возврат инвестиций и дивиденды</p>
 <div class="btn-bar"><button class="btn" onclick="exportFull()">⬇ Excel (полная модель)</button><button class="btn" onclick="exportPDF()" style="background:#c62828">⬇ PDF для инвестора</button></div>
 <div id="partners-content"></div></div>
+
+<div id="analysis" class="panel">
+<h1>Анализ</h1><p class="subtitle">Breakeven, чувствительность к среднему чеку и загрузке, IRR</p>
+<div class="kpi-grid" id="be-kpi"></div>
+<div class="section"><div class="section-header" style="cursor:default">Breakeven (точка безубыточности)</div>
+<div class="section-body"><p style="color:var(--muted);font-size:11px;margin-bottom:8px">Минимальная оборачиваемость, при которой годовой EBITDA = 0 (стабилизированный год).</p>
+<div class="kpi-grid" style="grid-template-columns:repeat(2,1fr)" id="be-detail"></div></div></div>
+<div class="section"><div class="section-header" style="cursor:default">Матрица EBITDA (ср. чек × оборачиваемость)</div>
+<div class="section-body" style="overflow-x:auto"><table id="sens-ebitda"></table></div></div>
+<div class="section"><div class="section-header" style="cursor:default">Матрица окупаемости, лет (ср. чек × оборачиваемость)</div>
+<div class="section-body" style="overflow-x:auto"><table id="sens-payback"></table></div></div>
+</div>
+
 </div>
 <canvas id="chart-canvas" width="700" height="300" style="display:none"></canvas>
 
@@ -402,7 +416,7 @@ function showPanel(id){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   $(id).classList.add('active');
-  const m={params:'Входные',rest:'Ресторан',banya:'Баня',combined:'с баней',restonly:'без бани',partners:'Партнёры'};
+  const m={params:'Входные',rest:'Ресторан',banya:'Баня',combined:'с баней',restonly:'без бани',partners:'Партнёры',analysis:'Анализ'};
   document.querySelectorAll('.nav-item').forEach(n=>{if(n.textContent.includes(m[id]))n.classList.add('active')});
 }
 function toggle(el){el.parentElement.classList.toggle('open')}
@@ -644,13 +658,14 @@ function exportPDF(){
   const tot={rev:tR.rev+tB.rev,eb:tR.eb+tB.eb,np:tR.np+tB.np,ocf:tR.ocf+tB.ocf};
   let cc=0,payback='>'+YEARS.length;
   YEARS.forEach((yr,i)=>{cc+=(D.RA[yr]?.ocf||0)+(D.BA[yr]?.ocf||0)+(i===0?-inv_r:0)+(i===1?-inv_b:0);if(cc>0&&payback.startsWith('>'))payback=(i+0.4).toFixed(1)});
-  const pi1=D.p1i,pi2=D.p2i,ppb1=D.p1b,ppb2=D.p2b,ppa1=D.p1a,ppa2=D.p2a;
+  const pi1=D.p1i,pi2=D.p2i,pi3=D.p3i,ppb1=D.p1b,ppb2=D.p2b,ppb3=D.p3b,ppa1=D.p1a,ppa2=D.p2a,ppa3=D.p3a;
   const rib=D.reinvest_before,ria=D.reinvest_after;
+  const bTotal=ppb1+ppb2+ppb3;
   function cpdf(inv,wB){
     const l1=inv*pi1,l2=inv*pi2;let r1=l1,r2=l2,dt1=0,dt2=0,rt1=0,rt2=0;const rows=[];
     YEARS.forEach(yr=>{const ocf=wB?((D.RA[yr]?.ocf||0)+(D.BA[yr]?.ocf||0)):(D.RA[yr]?.ocf||0);
       const np=wB?((D.RA[yr]?.np||0)+(D.BA[yr]?.np||0)):(D.RA[yr]?.np||0);
-      const a1=Math.min(r1,Math.max(0,ocf)*pi1/(pi1+pi2)),a2=Math.min(r2,Math.max(0,ocf)*pi2/(pi1+pi2));
+      const a1=Math.min(r1,Math.max(0,ocf)*(bTotal>0?ppb1/bTotal:pi1/(pi1+pi2))),a2=Math.min(r2,Math.max(0,ocf)*(bTotal>0?ppb2/bTotal:pi2/(pi1+pi2)));
       r1-=a1;r2-=a2;rt1+=a1;rt2+=a2;
       const npP=Math.max(0,np);let d1,d2;
       if(r1<=0&&r2<=0){const dist=npP*(1-ria);d1=dist*ppa1;d2=dist*ppa2}
@@ -901,7 +916,7 @@ D={RA,BA,inv_r,inv_b,inv_t,
   reinvest_before,reinvest_after};
 renderDetail('rest-table','rest-kpi',RA,RR);
 renderDetail('banya-table','banya-kpi',BA,BR);
-renderComb();renderRO();renderPartners();
+renderComb();renderRO();renderPartners();renderAnalysis();
 }
 
 function renderDetail(tid,kid,yd,rows){
@@ -1029,16 +1044,17 @@ function renderPartners(){
       const ocf=wB?(D.RA[yr].ocf+D.BA[yr].ocf):D.RA[yr].ocf;
       const np=wB?(D.RA[yr].np+D.BA[yr].np):D.RA[yr].np;
       const nm=MIY[i];
-      // Returns from OCF proportional to investment share
-      const ocf1=Math.max(0,ocf)*D.p1i/totalShare;
+      // Returns from OCF proportional to "before payback" shares (p1b/p2b/p3b)
+      const beforeTotal=D.p1b+D.p2b+D.p3b;
+      const ocf1=Math.max(0,ocf)*(beforeTotal>0?D.p1b/beforeTotal:D.p1i/totalShare);
       const ret1=Math.min(p1r,ocf1);const prevP1=p1r;
       p1r=Math.max(0,p1r-ret1);p1rt+=ret1;
       if(prevP1>0&&p1r<=0&&!p1payback){const mtr=prevP1/(ocf1/nm);p1payback=YEARS[0]+i-1+(MS[i]>0?(MS[i]+mtr)/12:mtr/12)}
-      const ocf2=Math.max(0,ocf)*D.p2i/totalShare;
+      const ocf2=Math.max(0,ocf)*(beforeTotal>0?D.p2b/beforeTotal:D.p2i/totalShare);
       const ret2=Math.min(p2r,ocf2);const prevP2=p2r;
       p2r=Math.max(0,p2r-ret2);p2rt+=ret2;
       if(prevP2>0&&p2r<=0&&!p2payback){const mtr=prevP2/(ocf2/nm);p2payback=YEARS[0]+i-1+(MS[i]>0?(MS[i]+mtr)/12:mtr/12)}
-      const ocf3=Math.max(0,ocf)*D.p3i/totalShare;
+      const ocf3=Math.max(0,ocf)*(beforeTotal>0?D.p3b/beforeTotal:D.p3i/totalShare);
       const ret3=Math.min(p3r,ocf3);const prevP3=p3r;
       p3r=Math.max(0,p3r-ret3);p3rt+=ret3;
       if(prevP3>0&&p3r<=0&&!p3payback){const mtr=prevP3/(ocf3/nm);p3payback=YEARS[0]+i-1+(MS[i]>0?(MS[i]+mtr)/12:mtr/12)}
@@ -1142,6 +1158,113 @@ function renderPartners(){
 
   $('partners-content').innerHTML=scenario('БЕЗ БАНИ',nb)+scenario('С БАНЕЙ',cb);
 }
+
+function renderAnalysis(){
+  if(!D.RA)return;
+  // Use stabilized year (year 3 or later)
+  const stabIdx=Math.min(2,YEARS.length-1);
+  const stabYr=YEARS[stabIdx];
+  const seats=V('r_seats');
+  const chkWd=V('r_check_wd'),chkWe=V('r_check_we');
+  const wd=V('r_wd'),we=V('r_we');
+  const avgCheck=(chkWd*wd+chkWe*we)/(wd+we);
+
+  // Get average seasonality
+  const rSeason=[];for(let i=1;i<=12;i++)rSeason.push(V('rs'+i));
+  const avgSeason=rSeason.reduce((a,b)=>a+b,0)/12;
+
+  // Current annual restaurant EBITDA at stabilized year
+  const curEB=D.RA[stabYr]?.eb||0;
+  const curRev=D.RA[stabYr]?.rev||0;
+  const curOcf=D.RA[stabYr]?.ocf||0;
+
+  // Breakeven: at what average oborach does EBITDA=0?
+  // EBITDA scales with revenue (variable part) but fixed costs stay
+  // Rev is proportional to oborach. Fixed costs = FOT + adm + office + mkt + fin + other
+  // Variable costs = food cost (proportional to rev) + acquiring (proportional to rev)
+  // EBITDA(f) = f*curRev*(1-fc-acq) - fixedCosts where f is scaling factor
+  // At current: EBITDA = curRev*(1-fc-acq) - fixedCosts = curEB
+  // fixedCosts = curRev*(1-fc-acq) - curEB
+  const fcPct=V('fc')/100,aqPct=V('acq')/100;
+  const varMarginPct=1-fcPct-aqPct;
+  const fixedCosts=curRev*varMarginPct-curEB;
+  // Breakeven: f*curRev*varMarginPct = fixedCosts => f = fixedCosts/(curRev*varMarginPct)
+  const beF=curRev*varMarginPct>0?fixedCosts/(curRev*varMarginPct):null;
+  const beOborach=beF!==null?avgSeason*beF:null;
+
+  $('be-kpi').innerHTML=`
+    <div class="kpi"><div class="label">Breakeven оборачиваемость (год ${stabYr})</div>
+      <div class="value ${beOborach!==null&&beOborach<avgSeason?'green':'red'}" style="font-size:24px">${beOborach!==null?beOborach.toFixed(2)+'×':'N/A'}</div>
+      <div class="sub">Текущая средняя: ${avgSeason.toFixed(2)}× | Запас: ${beOborach!==null?(((avgSeason-beOborach)/avgSeason)*100).toFixed(0)+'%':'N/A'}</div></div>
+    <div class="kpi"><div class="label">Breakeven чеков/день</div>
+      <div class="value accent" style="font-size:24px">${beOborach!==null?Math.round(seats*beOborach):'N/A'}</div>
+      <div class="sub">Текущий: ${Math.round(seats*avgSeason)}/день</div></div>
+    <div class="kpi"><div class="label">EBITDA год ${stabYr}</div>
+      <div class="value ${curEB>=0?'green':'red'}" style="font-size:24px">${fmt(curEB)} €</div>
+      <div class="sub">Margin: ${curRev?((curEB/curRev)*100).toFixed(1)+'%':'0%'}</div></div>`;
+
+  $('be-detail').innerHTML=`
+    <div class="kpi"><div class="label">Выручка при Breakeven</div><div class="value accent">${beF!==null?fmt(curRev*beF):'—'} €</div></div>
+    <div class="kpi"><div class="label">Фиксированные расходы/год</div><div class="value">${fmt(fixedCosts)} €</div><div class="sub">${fmt(fixedCosts/12)} €/мес</div></div>`;
+
+  // Sensitivity matrix: avg check change × oborach change → annual EBITDA
+  const checkSteps=[-30,-20,-10,0,10,20,30];
+  const obSteps=[-0.3,-0.2,-0.1,0,0.1,0.2,0.3];
+
+  let h='<tr><th>Чек \\ Оборач.</th>';
+  obSteps.forEach(os=>h+=`<th>${(avgSeason+os).toFixed(1)}×</th>`);
+  h+='</tr>';
+
+  checkSteps.forEach(cs=>{
+    const newCheck=avgCheck*(1+cs/100);
+    h+=`<tr><td style="font-weight:600">${Math.round(newCheck)}€ (${cs>=0?'+':''}${cs}%)</td>`;
+    obSteps.forEach(os=>{
+      const factor=(avgSeason+os)/avgSeason*(1+cs/100);
+      const newEB=factor*curRev*varMarginPct-fixedCosts;
+      const annEB=newEB;
+      let bg='';
+      if(annEB<0)bg='background:#3a0505;color:var(--red)';
+      else if(annEB<curEB*0.5)bg='background:#3a2200;color:var(--orange)';
+      else if(annEB<curEB)bg='background:#1a2a1a;color:var(--text)';
+      else bg='background:#1b3a1b;color:var(--green)';
+      const isCur=cs===0&&os===0?'font-weight:700;border:2px solid var(--accent);':'';
+      h+=`<td style="${bg};${isCur}">${fmt(annEB)}</td>`;
+    });
+    h+='</tr>';
+  });
+  $('sens-ebitda').innerHTML=h;
+
+  // Payback matrix
+  let hp='<tr><th>Чек \\ Оборач.</th>';
+  obSteps.forEach(os=>hp+=`<th>${(avgSeason+os).toFixed(1)}×</th>`);
+  hp+='</tr>';
+
+  const inv_t=D.inv_t;
+  checkSteps.forEach(cs=>{
+    const newCheck=avgCheck*(1+cs/100);
+    hp+=`<tr><td style="font-weight:600">${Math.round(newCheck)}€</td>`;
+    obSteps.forEach(os=>{
+      const factor=(avgSeason+os)/avgSeason*(1+cs/100);
+      const annEB=factor*curRev*varMarginPct-fixedCosts;
+      const amort=D.inv_r/(V('amort_y')*12)*12;
+      const annOcf=annEB-Math.max((annEB-amort)*V('tax')/100,0);
+      let pb;
+      if(annOcf<=0)pb='>15';
+      else pb=(inv_t/annOcf).toFixed(1);
+      let bg='';
+      const pbN=parseFloat(pb);
+      if(isNaN(pbN)||pbN>10)bg='background:#3a0505;color:var(--red)';
+      else if(pbN>7)bg='background:#3a2200;color:var(--orange)';
+      else if(pbN>5)bg='background:#1a2a1a;color:var(--text)';
+      else bg='background:#1b3a1b;color:var(--green)';
+      const isCur=cs===0&&os===0?'font-weight:700;border:2px solid var(--accent);':'';
+      hp+=`<td style="${bg};${isCur}">${pb} лет</td>`;
+    });
+    hp+='</tr>';
+  });
+  $('sens-payback').innerHTML=hp;
+}
+
 // === ARCHIVE ===
 const ARCH_INPUTS=['inv_buyout','inv_legal','inv_renov','inv_design','inv_mkt','inv_furn',
   'inv_bp','inv_bb','r_seats','r_check_wd','r_check_we','r_wd','r_we',
