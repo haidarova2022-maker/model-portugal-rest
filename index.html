@@ -212,37 +212,37 @@ h1{font-size:16px;margin-bottom:3px}
 </div></div>
 
 <div class="section collapsible open"><div class="section-header" onclick="toggle(this)">ФОТ ресторана<span class="toggle-arrow">▼</span></div><div class="section-body">
+<p style="color:var(--accent);font-size:11px;margin-bottom:6px;font-weight:600">Бармен/офиц./повар — кол-во по месяцам</p>
+<p style="color:var(--muted);font-size:10px;margin-bottom:6px">Линейный персонал: зимой меньше, летом больше.</p>
+<div class="row"><label>Ставка бармен/офиц./повар</label><input type="number" id="s2" value="1600" oninput="calc()"><span class="unit">€</span></div>
+<div class="season-grid">
+<div class="ml">Янв</div><div class="ml">Фев</div><div class="ml">Мар</div><div class="ml">Апр</div><div class="ml">Май</div><div class="ml">Июн</div>
+<div class="ml">Июл</div><div class="ml">Авг</div><div class="ml">Сен</div><div class="ml">Окт</div><div class="ml">Ноя</div><div class="ml">Дек</div>
+<input type="number" id="fs1" value="10" oninput="calc()">
+<input type="number" id="fs2" value="10" oninput="calc()">
+<input type="number" id="fs3" value="12" oninput="calc()">
+<input type="number" id="fs4" value="14" oninput="calc()">
+<input type="number" id="fs5" value="14" oninput="calc()">
+<input type="number" id="fs6" value="16" oninput="calc()">
+<input type="number" id="fs7" value="16" oninput="calc()">
+<input type="number" id="fs8" value="16" oninput="calc()">
+<input type="number" id="fs9" value="14" oninput="calc()">
+<input type="number" id="fs10" value="14" oninput="calc()">
+<input type="number" id="fs11" value="10" oninput="calc()">
+<input type="number" id="fs12" value="10" oninput="calc()">
+</div>
+<p style="color:var(--accent);font-size:11px;margin:14px 0 6px;font-weight:600">Остальной персонал (фиксированный)</p>
 <div class="staff-grid">
 <span class="sh">Должность</span><span class="sh">Ставка €</span><span class="sh">Чел.</span><span class="sh">Итого</span>
 <span>Разнорабочий</span><input type="number" id="s1" value="1200" oninput="calc()"><input type="number" id="n1" value="4" oninput="calc()"><span class="val" id="st1"></span>
-<span>Бармен/офиц./повар</span><input type="number" id="s2" value="1600" oninput="calc()"><input type="number" id="n2" value="16" oninput="calc()"><span class="val" id="st2"></span>
 <span>Менеджер/шеф</span><input type="number" id="s3" value="2800" oninput="calc()"><input type="number" id="n3" value="3" oninput="calc()"><span class="val" id="st3"></span>
 <span>Директор</span><input type="number" id="s4" value="3500" oninput="calc()"><input type="number" id="n4" value="1" oninput="calc()"><span class="val" id="st4"></span>
 <span>Мотивация сотрудников</span><input type="number" id="s5" value="6000" oninput="calc()"><input type="number" id="n5" value="1" oninput="calc()"><span class="val" id="st5"></span>
 <span>Фин. менеджер</span><input type="number" id="s6" value="2000" oninput="calc()"><input type="number" id="n6" value="1" oninput="calc()"><span class="val" id="st6"></span>
 </div>
 <div class="row"><label>Налоги на ФОТ</label><input type="number" id="fot_tax" value="48" oninput="calc()"><span class="unit">%</span></div>
-<div class="row"><label><b>ФОТ операц. / офисный</b></label><span class="val accent" id="fot_info"></span></div>
 <div class="row"><label><b>ИТОГО ФОТ с налогами</b></label><span class="val green" id="fot_total"></span></div>
-<p style="color:var(--accent);font-size:11px;margin:12px 0 6px;font-weight:600">Кол-во операц. персонала по месяцам (ставки фиксированы)</p>
-<p style="color:var(--muted);font-size:10px;margin-bottom:6px">Базовое кол-во = сумма сотрудников выше. Можно уменьшить зимой, увеличить летом.</p>
-<div class="season-grid">
-<div class="ml">Янв</div><div class="ml">Фев</div><div class="ml">Мар</div><div class="ml">Апр</div><div class="ml">Май</div><div class="ml">Июн</div>
-<div class="ml">Июл</div><div class="ml">Авг</div><div class="ml">Сен</div><div class="ml">Окт</div><div class="ml">Ноя</div><div class="ml">Дек</div>
-<input type="number" id="fs1" value="20" oninput="calc()">
-<input type="number" id="fs2" value="20" oninput="calc()">
-<input type="number" id="fs3" value="22" oninput="calc()">
-<input type="number" id="fs4" value="24" oninput="calc()">
-<input type="number" id="fs5" value="24" oninput="calc()">
-<input type="number" id="fs6" value="26" oninput="calc()">
-<input type="number" id="fs7" value="26" oninput="calc()">
-<input type="number" id="fs8" value="26" oninput="calc()">
-<input type="number" id="fs9" value="24" oninput="calc()">
-<input type="number" id="fs10" value="24" oninput="calc()">
-<input type="number" id="fs11" value="20" oninput="calc()">
-<input type="number" id="fs12" value="20" oninput="calc()">
-</div>
-<p style="color:var(--muted);margin-top:6px;font-size:10px">ФОТ/мес (справочно):</p>
+<p style="color:var(--muted);margin-top:6px;font-size:10px">ФОТ операц./мес по месяцам (справочно):</p>
 <div class="season-grid" style="margin-top:4px">
 <div class="ml">Янв</div><div class="ml">Фев</div><div class="ml">Мар</div><div class="ml">Апр</div><div class="ml">Май</div><div class="ml">Июн</div>
 <div class="ml">Июл</div><div class="ml">Авг</div><div class="ml">Сен</div><div class="ml">Окт</div><div class="ml">Ноя</div><div class="ml">Дек</div>
@@ -407,10 +407,10 @@ let userRole=sessionStorage.getItem('model_role')||'';
 
 function doLogin(){
   const pass=$('login-pass').value;
-  if(pass===ADMIN_PASS){userRole='admin';sessionStorage.setItem('model_role','admin');applyRole();$('login-modal').style.display='none'}
+  if(pass===ADMIN_PASS){userRole='admin';sessionStorage.setItem('model_role','admin');applyRole();archRender();$('login-modal').style.display='none'}
   else{$('login-pass').style.borderColor='var(--red)';$('login-pass').value='';$('login-pass').placeholder='Неверный пароль'}
 }
-function doGuest(){userRole='guest';sessionStorage.setItem('model_role','guest');applyRole();$('login-modal').style.display='none'}
+function doGuest(){userRole='guest';sessionStorage.setItem('model_role','guest');applyRole();archRender();$('login-modal').style.display='none'}
 function applyRole(){
   const badge=$('role-badge');
   if(userRole==='admin'){badge.textContent='Админ';badge.className='role-badge role-admin'}
@@ -898,26 +898,27 @@ $('inv_banya_total').textContent=fmt(inv_b)+' €';
 $('inv_total').textContent=fmt(inv_t)+' €';
 
 const ft=V('fot_tax')/100;
-const staff=[[V('s1'),V('n1')],[V('s2'),V('n2')],[V('s3'),V('n3')],[V('s4'),V('n4')]];
-const office=[[V('s5'),V('n5')],[V('s6'),V('n6')]];
-let fo=0,ff=0;
-staff.forEach(([s,n],i)=>{const t=s*n;$('st'+(i+1)).textContent=fmt(t);fo+=t});
-office.forEach(([s,n],i)=>{const t=s*n;$('st'+(i+5)).textContent=fmt(t);ff+=t});
-const r_ofot=ff*(1+ft);
-// Seasonal staff: base total headcount and per-person avg cost
-const baseHeadcount=staff.reduce((s,[,n])=>s+n,0);
-const avgCostPerPerson=baseHeadcount>0?fo/baseHeadcount:0;
-// Read monthly headcount
-const staffMonthly=[];
+// Бармен/офиц/повар — ставка фиксирована, кол-во по месяцам
+const s2rate=V('s2');
+// Остальной фиксированный персонал
+const fixedStaff=[[V('s1'),V('n1'),'st1'],[V('s3'),V('n3'),'st3'],[V('s4'),V('n4'),'st4']];
+const office=[[V('s5'),V('n5'),'st5'],[V('s6'),V('n6'),'st6']];
+let fixedCostRaw=0,offCostRaw=0;
+fixedStaff.forEach(([s,n,id])=>{const t=s*n;$(id).textContent=fmt(t);fixedCostRaw+=t});
+office.forEach(([s,n,id])=>{const t=s*n;$(id).textContent=fmt(t);offCostRaw+=t});
+const fixedOpsFot=fixedCostRaw*(1+ft);
+const r_ofot=offCostRaw*(1+ft);
+// Monthly FOT = fixed staff + seasonal бармены
+const staffMonthlyFot=[];
 for(let i=1;i<=12;i++){
   const cnt=V('fs'+i);
-  staffMonthly.push(cnt);
-  const monthFot=cnt*avgCostPerPerson*(1+ft);
+  const monthFot=fixedOpsFot+cnt*s2rate*(1+ft);
+  staffMonthlyFot.push(monthFot);
   const el=$('fc'+i);if(el)el.textContent=fmt(monthFot);
 }
-const r_fot=baseHeadcount>0?fo/baseHeadcount*(1+ft):0; // per-person FOT with tax (will multiply by monthly count)
-$('fot_info').textContent=fmt(fo*(1+ft))+' / '+fmt(r_ofot)+' €';
-$('fot_total').textContent=fmt(fo*(1+ft)+r_ofot)+' €';
+// Average for display
+const avgMonthFot=staffMonthlyFot.reduce((a,b)=>a+b,0)/12;
+$('fot_total').textContent=fmt(avgMonthFot+r_ofot)+' €/мес (средний)';
 
 const ir=V('iva_r')/100,ib=V('iva_b')/100,fc=V('fc')/100,tx=V('tax')/100,aq=V('acq')/100,ay=V('amort_y');
 const seats=V('r_seats');
@@ -992,7 +993,7 @@ for(let yi=0;yi<YEARS.length;yi++){
     const rn=rg/(1+ir);
     const food=rn*fc,acqv=rn*aq;
     const ce=cumExp[yi]; // expense growth multiplier
-    const monthFot=staffMonthly[mi]*avgCostPerPerson*(1+ft); // seasonal FOT
+    const monthFot=staffMonthlyFot[mi]; // seasonal FOT (fixed staff + seasonal бармены)
     const ebm=rn-food-acqv-monthFot*ce-r_ofot*ce-rm*ce-rx*ce;
     const pt=ebm-ram,txm=Math.max(pt*tx,0),npm=ebm-ram-txm,ocfm=ebm-txm;
     rmd.push({month:MN[mi],rev:rn,food:-food,fot:-monthFot*ce,ofot:-r_ofot*ce,mkt:-rm*ce,
@@ -1426,7 +1427,7 @@ const ARCH_INPUTS=['inv_buyout','inv_legal','inv_renov','inv_design','inv_mkt','
   'inv_bp','inv_bb','r_seats','r_check_wd','r_check_we','r_wd','r_we',
   'rs1','rs2','rs3','rs4','rs5','rs6','rs7','rs8','rs9','rs10','rs11','rs12',
   'bs1','bs2','bs3','bs4','bs5','bs6','bs7','bs8','bs9','bs10','bs11','bs12',
-  's1','n1','s2','n2','s3','n3','s4','n4','s5','n5','s6','n6','fot_tax',
+  's1','n1','s2','s3','n3','s4','n4','s5','n5','s6','n6','fot_tax',
   'fs1','fs2','fs3','fs4','fs5','fs6','fs7','fs8','fs9','fs10','fs11','fs12',
   'g1','g2','g3','g4','g5','g6','g7','g8','g9','g10',
   'e1','e2','e3','e4','e5','e6','e7','e8','e9','e10',
