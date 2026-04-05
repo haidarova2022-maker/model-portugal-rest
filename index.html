@@ -31,7 +31,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .row .unit{font-size:10px;color:var(--dim);width:22px}
 .row .val{font-weight:600;min-width:70px;text-align:right}
 .val.green{color:var(--green)}.val.red{color:var(--red)}.val.accent{color:var(--accent)}
-.staff-grid{display:grid;grid-template-columns:1fr 70px 50px 80px;gap:4px;align-items:center;margin-bottom:8px}
+.staff-grid{display:grid;grid-template-columns:220px 70px 50px 80px;gap:4px;align-items:center;margin-bottom:8px}
 .staff-grid .sh{color:var(--dim);font-size:10px;font-weight:600}
 .staff-grid input{width:100%;background:#0d1820;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:3px;text-align:right}
 .season-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:6px}
@@ -146,10 +146,20 @@ h1{font-size:16px;margin-bottom:3px}
 
 <div class="section collapsible open"><div class="section-header" onclick="toggle(this)">Ресторан — выручка<span class="toggle-arrow">▼</span></div><div class="section-body">
 <div class="row"><label>Посадочных мест</label><input type="number" id="r_seats" value="140" oninput="calc()"></div>
-<div class="row"><label>Ср. чек будни</label><input type="number" id="r_check_wd" value="35" oninput="calc()"><span class="unit">€</span></div>
-<div class="row"><label>Ср. чек выходные</label><input type="number" id="r_check_we" value="50" oninput="calc()"><span class="unit">€</span></div>
 <div class="row"><label>Будних дней/мес</label><input type="number" id="r_wd" value="22" oninput="calc()"></div>
 <div class="row"><label>Выходных дней/мес</label><input type="number" id="r_we" value="8" oninput="calc()"></div>
+<p style="color:var(--accent);font-size:11px;margin:10px 0 6px;font-weight:600">Структура среднего чека</p>
+<div class="staff-grid" style="grid-template-columns:220px 70px 60px">
+<span class="sh">Тип чека</span><span class="sh">€</span><span class="sh">Доля %</span>
+<span>Только напитки</span><input type="number" id="chk1" value="15" oninput="calc()"><input type="number" id="chk1p" value="20" oninput="calc()">
+<span>Напитки + перекус</span><input type="number" id="chk2" value="30" oninput="calc()"><input type="number" id="chk2p" value="30" oninput="calc()">
+<span>Обед</span><input type="number" id="chk3" value="45" oninput="calc()"><input type="number" id="chk3p" value="35" oninput="calc()">
+<span>Ужин</span><input type="number" id="chk4" value="70" oninput="calc()"><input type="number" id="chk4p" value="15" oninput="calc()">
+</div>
+<div class="row"><label><b>Контроль долей</b></label><span class="val" id="chk_check"></span></div>
+<div class="row"><label><b>Средневзвешенный чек (будни)</b></label><span class="val accent" id="avg_check_wd"></span></div>
+<div class="row"><label>Коэфф. чека выходных</label><input type="number" id="r_we_mult" value="1.3" step="0.1" oninput="calc()"><span class="unit">×</span></div>
+<div class="row"><label><b>Средневзвешенный чек (выходные)</b></label><span class="val accent" id="avg_check_we"></span></div>
 <div class="row"><label>Food cost</label><input type="number" id="fc" value="30" oninput="calc()"><span class="unit">%</span></div>
 <div class="row"><label><b>Оборот/мес (при оборач. 1.0)</b></label><span class="val green" id="r_rev_month"></span></div>
 </div></div>
@@ -356,6 +366,11 @@ h1{font-size:16px;margin-bottom:3px}
 <div class="row"><label>Партнёр 2</label><input type="number" id="p2a" value="37" oninput="calc()"><span class="unit">%</span></div>
 <div class="row"><label>Партнёр 3</label><input type="number" id="p3a" value="0" oninput="calc()"><span class="unit">%</span></div>
 <div class="row"><label><b>Контроль (сумма)</b></label><span class="val" id="after_check"></span></div>
+
+<p style="color:var(--accent);font-size:11px;margin:14px 0 10px;font-weight:600">4. Налог на дивиденды (Португалия)</p>
+<div class="row"><label>Налог на дивиденды (IRS)</label><input type="number" id="div_tax" value="28" oninput="calc()"><span class="unit">%</span></div>
+<div class="row"><label><b>Дивиденды «на руки»</b></label><span class="val accent" id="div_net_info"></span></div>
+<p style="color:var(--muted);font-size:9px;margin-top:4px">Стандартная ставка 28% (Art. 71 CIRS). При englobamento 50% исключается из дохода. IRC 21% уже учтён в ЧП модели.</p>
 </div></div>
 </div>
 
@@ -389,6 +404,9 @@ h1{font-size:16px;margin-bottom:3px}
 <div class="section-body" style="overflow-x:auto"><table id="sens-ebitda"></table></div></div>
 <div class="section"><div class="section-header" style="cursor:default">Матрица окупаемости, лет (ср. чек × оборачиваемость)</div>
 <div class="section-body" style="overflow-x:auto"><table id="sens-payback"></table></div></div>
+<div class="section"><div class="section-header" style="cursor:default">Помесячный breakeven (EBITDA=0 и ЧП=0)</div>
+<div class="section-body"><p style="color:var(--muted);font-size:11px;margin-bottom:8px">Минимальная оборачиваемость по каждому месяцу для вывода в ноль. Учитывает сезонный ФОТ и фиксированные расходы.</p>
+<div style="overflow-x:auto"><table id="month-breakeven"></table></div></div></div>
 </div>
 
 </div>
@@ -922,9 +940,17 @@ $('fot_total').textContent=fmt(avgMonthFot+r_ofot)+' €/мес (средний)
 
 const ir=V('iva_r')/100,ib=V('iva_b')/100,fc=V('fc')/100,tx=V('tax')/100,aq=V('acq')/100,ay=V('amort_y');
 const seats=V('r_seats');
-// Base revenue at occupancy 1.0: seats * 1 turn * check * days
-const chw=V('r_check_wd'),che=V('r_check_we'),wd=V('r_wd'),we=V('r_we');
-const base=seats*chw*wd+seats*che*we;
+const wd=V('r_wd'),we=V('r_we');
+// Weighted average check from 4 types
+const chkTypes=[[V('chk1'),V('chk1p')],[V('chk2'),V('chk2p')],[V('chk3'),V('chk3p')],[V('chk4'),V('chk4p')]];
+const chkPctTotal=chkTypes.reduce((s,[,p])=>s+p,0);
+$('chk_check').textContent=chkPctTotal+'%';$('chk_check').style.color=chkPctTotal===100?'var(--green)':'var(--red)';
+const avgCheckWd=chkPctTotal>0?chkTypes.reduce((s,[c,p])=>s+c*p/100,0):0;
+const weMult=V('r_we_mult');
+const avgCheckWe=avgCheckWd*weMult;
+$('avg_check_wd').textContent=Math.round(avgCheckWd)+' €';
+$('avg_check_we').textContent=Math.round(avgCheckWe)+' €';
+const base=seats*avgCheckWd*wd+seats*avgCheckWe*we;
 $('r_rev_month').textContent=fmt(base)+' €';
 
 // Seasonality coefficients (12 months, % of base)
@@ -1026,7 +1052,9 @@ for(let yi=0;yi<YEARS.length;yi++){
     mkt_v:bsm('mkt_v'),acq_v:bsm('acq_v'),eb:bsm('eb'),amort:bsm('amort'),tax_v:bsm('tax_v'),np:bsm('np'),ocf:bsm('ocf')};
 }
 
-D={RA,BA,inv_r,inv_b,inv_t,
+const divTax=V('div_tax')/100;
+$('div_net_info').textContent=(100-V('div_tax'))+'% от начисленных';
+D={RA,BA,inv_r,inv_b,inv_t,cum,cumExp,staffMonthlyFot,r_ofot,rm,rx,divTax,
   p1i:V('p1i')/100,p2i:V('p2i')/100,p3i:V('p3i')/100,
   p1b:V('p1b')/100,p2b:V('p2b')/100,p3b:V('p3b')/100,
   p1a:V('p1a')/100,p2a:V('p2a')/100,p3a:V('p3a')/100,
@@ -1235,7 +1263,8 @@ function renderPartners(){
       <div class="kpi"><div class="label">Возврат займа</div><div class="value">${fmt(retTotal)} €</div>
         <div class="bar-container"><div class="bar ${barClass}" style="width:${pct}%"></div></div>
         <div class="sub">${pct.toFixed(0)}% возвращено</div></div>
-      <div class="kpi"><div class="label">Дивиденды (${divPeriod})</div><div class="value green">${fmt(divTotal)} €</div></div>
+      <div class="kpi"><div class="label">Дивиденды (${divPeriod})</div><div class="value green">${fmt(divTotal)} €</div>
+        <div class="sub">На руки (−${(D.divTax*100).toFixed(0)}% IRS): ${fmt(divTotal*(1-D.divTax))} €</div></div>
       <div class="kpi"><div class="label">ROI</div><div class="value accent">${fmtp(roi)}</div></div>
       <div class="kpi"><div class="label">Возврат займа</div><div class="value accent">${payback} лет</div></div>
     </div>
@@ -1301,9 +1330,12 @@ function renderAnalysis(){
   const stabIdx=Math.min(2,YEARS.length-1);
   const stabYr=YEARS[stabIdx];
   const seats=V('r_seats');
-  const chkWd=V('r_check_wd'),chkWe=V('r_check_we');
+  const chkT=[[V('chk1'),V('chk1p')],[V('chk2'),V('chk2p')],[V('chk3'),V('chk3p')],[V('chk4'),V('chk4p')]];
+  const chkPT=chkT.reduce((s,[,p])=>s+p,0);
+  const aChkWd=chkPT>0?chkT.reduce((s,[c,p])=>s+c*p/100,0):0;
+  const aChkWe=aChkWd*V('r_we_mult');
   const wd=V('r_wd'),we=V('r_we');
-  const avgCheck=(chkWd*wd+chkWe*we)/(wd+we);
+  const avgCheck=(aChkWd*wd+aChkWe*we)/(wd+we);
 
   // Get average seasonality
   const rSeason=[];for(let i=1;i<=12;i++)rSeason.push(V('rs'+i));
@@ -1420,11 +1452,68 @@ function renderAnalysis(){
     hp+='</tr>';
   });
   $('sens-payback').innerHTML=hp;
+
+  // Monthly breakeven table
+  const ir=V('iva_r')/100;
+  const amortMonth=D.inv_r/(V('amort_y')*12);
+  const MNames=['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+  const rSeason2=[];for(let i=1;i<=12;i++)rSeason2.push(V('rs'+i));
+  const chkT2=[[V('chk1'),V('chk1p')],[V('chk2'),V('chk2p')],[V('chk3'),V('chk3p')],[V('chk4'),V('chk4p')]];
+  const chkPT2=chkT2.reduce((s,[,p])=>s+p,0);
+  const aChkWd2=chkPT2>0?chkT2.reduce((s,[c,p])=>s+c*p/100,0):0;
+  const aChkWe2=aChkWd2*V('r_we_mult');
+
+  let hm='<tr><th>Месяц</th><th>Сезон.</th><th>Чеков/день</th><th>Выручка</th><th>ФОТ</th><th>Расходы</th><th>EBITDA</th><th>ЧП</th><th>BE EBITDA=0</th><th>BE ЧП=0</th></tr>';
+
+  for(let m=0;m<12;m++){
+    const sc=rSeason2[m];
+    // Monthly revenue at current season (stabilized year growth)
+    const cumG=D.cum[stabIdx]||1;
+    const revGross=(seats*sc*aChkWd2*wd+seats*sc*aChkWe2*we)*cumG;
+    const rev=revGross/(1+ir);
+    const food=rev*fcPct;
+    const acqv=rev*aqPct;
+    const ce=D.cumExp[stabIdx]||1;
+    const mFot=D.staffMonthlyFot[m]*ce;
+    const mFixed=(D.r_ofot+D.rm+D.rx)*ce;
+    const eb=rev-food-acqv-mFot-mFixed;
+    const np=eb-amortMonth-Math.max((eb-amortMonth)*taxRate,0);
+
+    // Breakeven EBITDA=0: at what oborach?
+    // eb = revF*varMarginPct - mFot - mFixed = 0
+    // revF proportional to oborach: revF = (seats*oborach*chkWd*wd + seats*oborach*chkWe*we)*cumG/(1+iva)
+    // revF = oborach * K where K = (seats*(chkWd*wd+chkWe*we)*cumG)/(1+iva)
+    const K=(seats*(aChkWd2*wd+aChkWe2*we)*cumG)/(1+ir);
+    const fixMonth=mFot+mFixed;
+    const beOb=K*varMarginPct>0?fixMonth/(K*varMarginPct):null;
+    // Breakeven NP=0: eb = amortMonth => oborach*K*varMarginPct - fixMonth = amortMonth
+    const beObNP=K*varMarginPct>0?(fixMonth+amortMonth)/(K*varMarginPct):null;
+
+    const ebColor=eb>=0?'var(--green)':'var(--red)';
+    const npColor=np>=0?'var(--green)':'var(--red)';
+    const beColor=beOb!==null&&sc>=beOb?'var(--green)':'var(--red)';
+    const beNPColor=beObNP!==null&&sc>=beObNP?'var(--green)':'var(--red)';
+
+    const checksDay=Math.round(seats*sc);
+    hm+=`<tr>
+      <td style="font-weight:600">${MNames[m]}</td>
+      <td>${sc.toFixed(2)}×</td>
+      <td>${checksDay}</td>
+      <td>${fmt(rev)}</td>
+      <td>${fmt(mFot)}</td>
+      <td>${fmt(mFixed)}</td>
+      <td style="color:${ebColor};font-weight:600">${fmt(eb)}</td>
+      <td style="color:${npColor};font-weight:600">${fmt(np)}</td>
+      <td style="color:${beColor};font-weight:600">${beOb!==null?beOb.toFixed(2)+'×':'—'}</td>
+      <td style="color:${beNPColor};font-weight:600">${beObNP!==null?beObNP.toFixed(2)+'×':'—'}</td>
+    </tr>`;
+  }
+  $('month-breakeven').innerHTML=hm;
 }
 
 // === ARCHIVE ===
 const ARCH_INPUTS=['inv_buyout','inv_legal','inv_renov','inv_design','inv_mkt','inv_furn',
-  'inv_bp','inv_bb','r_seats','r_check_wd','r_check_we','r_wd','r_we',
+  'inv_bp','inv_bb','r_seats','chk1','chk1p','chk2','chk2p','chk3','chk3p','chk4','chk4p','r_we_mult','r_wd','r_we',
   'rs1','rs2','rs3','rs4','rs5','rs6','rs7','rs8','rs9','rs10','rs11','rs12',
   'bs1','bs2','bs3','bs4','bs5','bs6','bs7','bs8','bs9','bs10','bs11','bs12',
   's1','n1','s2','s3','n3','s4','n4','s5','n5','s6','n6','fot_tax',
@@ -1436,7 +1525,7 @@ const ARCH_INPUTS=['inv_buyout','inv_legal','inv_renov','inv_design','inv_mkt','
   'x_imi','x_insur','x_lic','x_legal','x_equip','x_train','x_acct','x_bank','x_reserve',
   'b_seats','b_chk_wd','b_chk_we','b_extra','b_rental','b_rental_d','b_cogs','b_adm','b_mkt_v','b_start',
   'bs1_sal','bs1_cnt','bs2_sal','bs2_cnt',
-  'p1i','p2i','p3i','p1b','p2b','p3b','p1a','p2a','p3a','reinvest_before','reinvest_after','horizon'];
+  'p1i','p2i','p3i','p1b','p2b','p3b','p1a','p2a','p3a','div_tax','reinvest_before','reinvest_after','horizon'];
 
 // === FIREBASE ===
 const firebaseConfig={
