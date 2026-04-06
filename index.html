@@ -435,9 +435,12 @@ function applyRole(){
   else{badge.textContent='Гость';badge.className='role-badge role-guest'}
   // Lock inputs for guest
   document.querySelectorAll('#params input, #params select').forEach(el=>{
+    if(el.id==='arch_name'||el.id==='login-pass')return; // never lock archive name
     if(userRole==='guest'){el.disabled=true;el.style.opacity='0.5'}
     else{el.disabled=false;el.style.opacity='1'}
   });
+  // Always enable arch_name for admin
+  if(userRole==='admin'){const an=$('arch_name');if(an){an.disabled=false;an.style.opacity='1'}}
   // Guest: hide save button, show only archive list with apply
   if(userRole==='guest'){
     const saveRow=$('arch_name')?.closest('.row');
